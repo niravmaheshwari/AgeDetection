@@ -18,27 +18,42 @@ from keras.layers import Dense
 
 
 # Initialising the model
-classifier = Sequential()
+regressor = Sequential()
 
 
-classifier.add(Conv2D(64, (3, 3), input_shape = (128, 128, 3), activation = 'relu'))
+regressor.add(Conv2D(64, (3, 3), input_shape = (128, 128, 3), activation = 'relu'))
 
 
-classifier.add(MaxPooling2D(pool_size = (2, 2)))
+regressor.add(MaxPooling2D(pool_size = (2, 2)))
+
+
+regressor.add(Conv2D(64, (3, 3), activation = 'relu'))
+
+
+regressor.add(MaxPooling2D(pool_size = (2, 2)))
 
 
 
-classifier.add(Flatten())
+regressor.add(Conv2D(64, (3, 3), activation = 'relu'))
 
 
-classifier.add(Dense(units = 128, activation = 'relu'))
+regressor.add(MaxPooling2D(pool_size = (2, 2)))
 
 
-classifier.add(Dense(units = 1, activation = 'linear'))
+regressor.add(Flatten())
+
+
+regressor.add(Dense(units = 256, activation = 'relu'))
+
+
+regressor.add(Dense(units = 256, activation = 'relu'))
+
+
+regressor.add(Dense(units = 1, activation = 'linear'))
 
 
 #compiling the model
-classifier.compile(optimizer = 'adam', loss = 'mean_squared_error', metrics = ['mean_squared_error'])
+regressor.compile(optimizer = 'adam', loss = 'mean_squared_error', metrics = ['mean_squared_error'])
 
 #making training data from input images
 
@@ -107,4 +122,6 @@ y_test=np.array(y_test)
 
 
 #fitting the model to training data
-classifier.fit(X_train, y_train, batch_size=32, nb_epoch=50)
+regressor.fit(X_train, y_train, batch_size=32, nb_epoch=50,shuffle=True)
+
+y_pred=regressor.predict(X_test)
